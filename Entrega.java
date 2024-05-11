@@ -64,13 +64,14 @@ class Entrega {
    * l'univers és suficientment petit com per poder provar tots els casos que faci falta).
    */
   static class Tema1 {
+
     /*
      * Donat n > 1, en quants de casos (segons els valors de veritat de les proposicions p1,...,pn)
      * la proposició (...((p1 -> p2) -> p3) -> ...) -> pn és certa?
      *
      * Vegeu el mètode Tema1.tests() per exemples.
      */
-    static int exercici1(int n) { //ComentariMiquel: funciona pero no se ni com, en chat gpt m'ha ajudat un poc, esta provat en netbeans
+    static int exercici1(int n) { //ComentariMiquel: funciona, pero no se ni com, esta provat en netbeans
       n++;
       int combinacionsTotals = (int) Math.pow(2, n);
       int certes = 0;
@@ -95,16 +96,29 @@ class Entrega {
           }
       }
 
-      return certes; // TODO
+      return certes;
   }
-
 
     /*
      * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
      */
-    static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TODO
-    }
+    static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) { //ComentariMiquel: En principi funciona, posant sa primera prova des professor me torna false (no se si esta be)
+      for (int x : universe) {
+          boolean trobaYUnica = false;
+          for (int y : universe) {
+              if (p.test(x) && q.test(x, y)) { // Mira si P(x) i Q(x,y) son vera
+                  if (trobaYUnica) {  // Si s'ha trobat y per x, retorna fals, ja que no es unica
+                      return false;
+                  }
+                  trobaYUnica = true; // S'ha trobat y que satisfa Q(x,y) per aquesta x
+              }
+          }
+          if (!trobaYUnica) {  // Si no hi ha y que satisfagui per aquesta x es fals
+              return false;
+          }
+      }
+      return true; // Si tots els elements estan revisats, i te una y unica, retorna true
+  }
 
     /*
      * És cert que ∃x : ∀y : Q(x, y) -> P(x) ?
