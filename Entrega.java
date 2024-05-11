@@ -70,9 +70,33 @@ class Entrega {
      *
      * Vegeu el mètode Tema1.tests() per exemples.
      */
-    static int exercici1(int n) {
-      return 0; // TODO
-    }
+     static int exercici1(int n) { //ComentariMiquel: Esta provat en netbeans, funciona; tot i que, alomillor ho canvi. Funciona deu sap perque.
+      n++;
+      int combinacionsTotals = (int) Math.pow(2, n);
+      int certes = 0;
+
+      for (int i = 0; i < combinacionsTotals; i++) {
+          int certesActuals = i;
+          boolean anteriorEraVertadera = true;
+
+          for (int j = 1; j <= n; j++) {
+              int verdaderValorDePj = (certesActuals & 1) == 1 ? 1 : 0;
+              certesActuals >>= 1;
+
+              if (j > 1 && anteriorEraVertadera) {
+                  anteriorEraVertadera = verdaderValorDePj == 1;
+              } else {
+                  anteriorEraVertadera = verdaderValorDePj == 1 || !anteriorEraVertadera;
+              }
+          }
+
+          if (anteriorEraVertadera) {
+              certes++;
+          }
+      }
+
+      return certes;
+  }
 
     /*
      * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
