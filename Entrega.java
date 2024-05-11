@@ -70,7 +70,7 @@ class Entrega {
      *
      * Vegeu el mètode Tema1.tests() per exemples.
      */
-     static int exercici1(int n) { //ComentariMiquel: Esta provat en netbeans, funciona; tot i que, alomillor ho canvi. Funciona deu sap perque.
+    static int exercici1(int n) { //ComentariMiquel: funciona pero no se ni com, en chat gpt m'ha ajudat un poc, esta provat en netbeans
       n++;
       int combinacionsTotals = (int) Math.pow(2, n);
       int certes = 0;
@@ -95,8 +95,9 @@ class Entrega {
           }
       }
 
-      return certes;
+      return certes; // TODO
   }
+
 
     /*
      * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
