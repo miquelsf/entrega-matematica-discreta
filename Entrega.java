@@ -124,15 +124,48 @@ class Entrega {
      * És cert que ∃x : ∀y : Q(x, y) -> P(x) ?
      */
     static boolean exercici3(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TODO
-    }
+      for (int x : universe) {
+          boolean valid = true;
+          for (int y : universe) {
+              if (q.test(x, y) && !p.test(x)) {
+                  valid = false; // Si Q(x, y) es ver y P(x) es fals, x no compleix la condició
+                  break;
+              }
+          }
+          if (valid) {
+              return true; // S'ha trobat un x que compleix la condició
+          }
+      }
+      return false; // No s'ha trobat cap x que compleixi la condició
+  }
 
     /*
      * És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
      */
     static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TODO
-    }
+      for (int x : universe) {
+          int uniqueYCount = 0;
+          for (int y : universe) {
+              boolean allZMatch = true;
+              for (int z : universe) {
+                  if (p.test(x, z) != q.test(y, z)) {
+                      allZMatch = false; // Si trobem un z que no compleix P(x, z) <-> Q(y, z), no és vàlid
+                      break;
+                  }
+              }
+              if (allZMatch) {
+                  uniqueYCount++;
+                  if (uniqueYCount > 1) {
+                      break; // Si trobem més d'un y que compleix la condició, no és únic
+                  }
+              }
+          }
+          if (uniqueYCount == 1) {
+              return true; // Si trobem exactament un y que compleix la condició, retorna true
+          }
+      }
+      return false; // Si no trobem cap x amb un y únic que compleixi la condició, retorna false
+  }
 
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
