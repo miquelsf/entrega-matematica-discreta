@@ -71,7 +71,7 @@ class Entrega {
      *
      * Vegeu el mètode Tema1.tests() per exemples.
      */
-    static int exercici1(int n) { //ComentariMiquel: funciona, pero no se ni com, esta provat en netbeans
+    static int exercici1(int n) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
       n++;
       int combinacionsTotals = (int) Math.pow(2, n);
       int certes = 0;
@@ -97,33 +97,35 @@ class Entrega {
       }
 
       return certes;
-  }
+    }
 
     /*
      * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
      */
-    static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) { //ComentariMiquel: En principi funciona, posant sa primera prova des professor me torna false (no se si esta be)
+    static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) { //Fet  Miquel, dona lo mateix que es professor, provat en netbeans
       for (int x : universe) {
-          boolean trobaYUnica = false;
-          for (int y : universe) {
-              if (p.test(x) && q.test(x, y)) { // Mira si P(x) i Q(x,y) son vera
-                  if (trobaYUnica) {  // Si s'ha trobat y per x, retorna fals, ja que no es unica
-                      return false;
+          if (p.test(x)) {
+              boolean existsUniqueY = false;
+              for (int y : universe) {
+                  if (q.test(x, y)) {
+                      if (existsUniqueY) {
+                          return false; // Se encontró más de un y que cumple Q(x, y)
+                      }
+                      existsUniqueY = true;
                   }
-                  trobaYUnica = true; // S'ha trobat y que satisfa Q(x,y) per aquesta x
+              }
+              if (!existsUniqueY) {
+                  return false; // No se encontró ningún y que cumple Q(x, y)
               }
           }
-          if (!trobaYUnica) {  // Si no hi ha y que satisfagui per aquesta x es fals
-              return false;
-          }
       }
-      return true; // Si tots els elements estan revisats, i te una y unica, retorna true
-  }
+      return true; // Para todos los x donde P(x) es verdadero, existe un único y que cumple Q(x, y)
+    }
 
     /*
      * És cert que ∃x : ∀y : Q(x, y) -> P(x) ?
      */
-    static boolean exercici3(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
+    static boolean exercici3(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
       for (int x : universe) {
           boolean valid = true;
           for (int y : universe) {
@@ -137,12 +139,12 @@ class Entrega {
           }
       }
       return false; // No s'ha trobat cap x que compleixi la condició
-  }
+    }
 
     /*
      * És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
      */
-    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
+    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
       for (int x : universe) {
           int uniqueYCount = 0;
           for (int y : universe) {
@@ -163,9 +165,10 @@ class Entrega {
           if (uniqueYCount == 1) {
               return true; // Si trobem exactament un y que compleix la condició, retorna true
           }
-      }
+        }
+        
       return false; // Si no trobem cap x amb un y únic que compleixi la condició, retorna false
-  }
+    	}
 
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
@@ -274,8 +277,58 @@ class Entrega {
      *
      * Podeu soposar que `a`, `b` i `c` estan ordenats de menor a major.
      */
-    static int exercici1(int[] a, int[] b, int[] c) {
-      return -1; // TODO
+    static int exercici1(int[] a, int[] b, int[] c) { //Fet Miquel, concorda amb les solucions del professor, provat en netbeans
+      int n = a.length;
+      int m = b.length;
+      int p = c.length;
+
+      // Calcular a \ c
+      int[] aDiffC = new int[n];
+      int j = 0;
+      for (int i = 0; i < n; i++) {
+          while (j < p && c[j] < a[i]) {
+              j++;
+          }
+          if (j == p || c[j] > a[i]) {
+              aDiffC[i] = a[i];
+          }
+      }
+
+      // Calcular a ∪ b
+      int[] aUnionB = new int[n + m];
+      int k = 0, l = 0, t = 0;
+      while (k < n && l < m) {
+          if (a[k] < b[l]) {
+              aUnionB[t++] = a[k++];
+          } else if (a[k] > b[l]) {
+              aUnionB[t++] = b[l++];
+          } else {
+              aUnionB[t++] = a[k++];
+              l++;
+          }
+      }
+      while (k < n) {
+          aUnionB[t++] = a[k++];
+      }
+      while (l < m) {
+          aUnionB[t++] = b[l++];
+      }
+
+      // Calcular el conjunt de parts
+      int count = 0;
+      for (int i = 0; i < (1 << (n + m)); i++) {
+          boolean valid = true;
+          for (int x : aDiffC) {
+              if ((i & (1 << x)) == 0) {
+                  valid = false;
+                  break;
+              }
+          }
+          if (valid) {
+              count++;
+          }
+      }
+      return count;
     }
 
     /*
@@ -286,8 +339,60 @@ class Entrega {
      *
      * Podeu soposar que `a` i `rel` estan ordenats de menor a major (`rel` lexicogràficament).
      */
-    static int exercici2(int[] a, int[][] rel) {
-      return -1; // TODO
+    static int exercici2(int[] a, int[][] rel) { // Fet Miquel, dona lo mateix que es professor, comprovat en netbeans
+      boolean[][] clausura = new boolean[a.length][a.length];
+
+      // Inicializar la clausura con la relación original
+      for (int[] par : rel) {
+          int i = indexOf(a, par[0]);
+          int j = indexOf(a, par[1]);
+          clausura[i][j] = true;
+      }
+
+      // Hacer la clausura reflexiva
+      for (int i = 0; i < a.length; i++) {
+          clausura[i][i] = true;
+      }
+
+      // Hacer la clausura simétrica
+      for (int i = 0; i < a.length; i++) {
+          for (int j = 0; j < a.length; j++) {
+              if (clausura[i][j]) {
+                  clausura[j][i] = true;
+              }
+          }
+      }
+
+      // Hacer la clausura transitiva
+      for (int k = 0; k < a.length; k++) {
+          for (int i = 0; i < a.length; i++) {
+              for (int j = 0; j < a.length; j++) {
+                  if (clausura[i][k] && clausura[k][j]) {
+                      clausura[i][j] = true;
+                  }
+              }
+          }
+      }
+
+      // Contar el número de pares en la clausura
+      int count = 0;
+      for (int i = 0; i < a.length; i++) {
+          for (int j = 0; j < a.length; j++) {
+              if (clausura[i][j]) {
+                  count++;
+              }
+          }
+      }
+      return count;
+    }
+
+    private static int indexOf(int[] a, int x) {
+      for (int i = 0; i < a.length; i++) {
+          if (a[i] == x) {
+              return i;
+          }
+      }
+      return -1;
     }
 
     /*
@@ -296,10 +401,47 @@ class Entrega {
      *
      * Podeu soposar que `a` i `rel` estan ordenats de menor a major (`rel` lexicogràficament).
      */
-    static int exercici3(int[] a, int[][] rel) {
-      return -1; // TODO
+    static int exercici3(int[] a, int[][] rel) { // Fet Miquel, concorda amb una solució des professor, alomillor es professor en te una de malament?, provat en netbeans
+      int n = a.length;
+      boolean[][] matriz = new boolean[n][n];
+
+      // Construir la matriz de la relación
+      for (int[] par : rel) {
+          int i = indexOf(a, par[0]);
+          int j = indexOf(a, par[1]);
+          matriz[i][j] = true;
+      }
+
+      // Verificar si es un orden total
+      for (int i = 0; i < n; i++) {
+          for (int j = 0; j < n; j++) {
+              if (i != j && !matriz[i][j] && !matriz[j][i]) {
+                  return -2; // No es un orden total
+              }
+          }
+      }
+
+      // Contar el número de aristas en el diagrama de Hasse
+      int count = 0;
+      for (int i = 0; i < n; i++) {
+          for (int j = 0; j < n; j++) {
+              if (matriz[i][j] && !existeCamino(matriz, i, j)) {
+                  count++;
+              }
+          }
+      }
+
+      return count;
     }
 
+    private static boolean existeCamino(boolean[][] matriz, int i, int j) {
+        for (int k = 0; k < matriz.length; k++) {
+            if (matriz[i][k] && matriz[k][j]) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /*
      * Comprovau si les relacions `rel1` i `rel2` són els grafs de funcions amb domini i codomini
@@ -308,16 +450,95 @@ class Entrega {
      * Podeu soposar que `a`, `rel1` i `rel2` estan ordenats de menor a major (les relacions,
      * lexicogràficament).
      */
-    static int[][] exercici4(int[] a, int[][] rel1, int[][] rel2) {
-      return new int[][] {}; // TODO
+    static int[][] exercici4(int[] a, int[][] rel1, int[][] rel2) { // Miquel: no se si funciona o no, no entenc le comprobacions del professor, el cas null almenys funciona
+      int n = a.length;
+      boolean[][] matriz1 = new boolean[n][n];
+      boolean[][] matriz2 = new boolean[n][n];
+
+      // Construir las matrices de las relaciones
+      for (int[] par : rel1) {
+          int i = indexOf(a, par[0]);
+          int j = indexOf(a, par[1]);
+          matriz1[i][j] = true;
+      }
+
+      for (int[] par : rel2) {
+          int i = indexOf(a, par[0]);
+          int j = indexOf(a, par[1]);
+          matriz2[i][j] = true;
+      }
+
+      // Verificar si son grafos de funciones
+      if (!esGrafoFuncion(matriz1) || !esGrafoFuncion(matriz2)) {
+          return null;
+      }
+
+      // Calcular la composición de las relaciones
+      boolean[][] composicion = new boolean[n][n];
+      for (int i = 0; i < n; i++) {
+          for (int j = 0; j < n; j++) {
+              for (int k = 0; k < n; k++) {
+                  if (matriz1[i][k] && matriz2[k][j]) {
+                      composicion[i][j] = true;
+                      break;
+                  }
+              }
+          }
+      }
+
+      // Convertir la matriz de la composición en un array de pares
+      List<int[]> composicionList = new ArrayList<>();
+      for (int i = 0; i < n; i++) {
+          for (int j = 0; j < n; j++) {
+              if (composicion[i][j]) {
+                  composicionList.add(new int[]{a[i], a[j]});
+              }
+          }
+      }
+
+      return composicionList.toArray(new int[0][0]);
+    }
+
+    private static boolean esGrafoFuncion(boolean[][] matriz) {
+        for (int i = 0; i < matriz.length; i++) {
+            int count = 0;
+            for (int j = 0; j < matriz.length; j++) {
+                if (matriz[i][j]) {
+                    count++;
+                }
+            }
+            if (count != 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*
      * Comprovau si la funció `f` amb domini `dom` i codomini `codom` té inversa. Si la té, retornau
      * el seu graf (el de l'inversa). Sino, retornau null.
      */
-    static int[][] exercici5(int[] dom, int[] codom, Function<Integer, Integer> f) {
-      return new int[][] {}; // TODO
+    static int[][] exercici5(int[] dom, int[] codom, Function<Integer, Integer> f) { //Miquel: no funciona :(, ni siquiera es cas null, no ho entenc
+      List<int[]> grafoFuncion = new ArrayList<>();
+
+      for (int x : dom) {
+          int y = f.apply(x);
+          if (!esElementoValido(y, codom)) {
+              return null; // No existe la función
+          }
+          grafoFuncion.add(new int[]{x, y});
+      }
+
+      return grafoFuncion.toArray(new int[0][0]);
+    }
+
+    private static boolean esElementoValido(int y, int[] codom) {
+        for (int c : codom) {
+            if (y == c) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
