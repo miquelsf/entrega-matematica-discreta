@@ -687,7 +687,28 @@ class Entrega {
      * Determinau si el graf és connex. Podeu suposar que `g` no és dirigit.
      */
     static boolean exercici1(int[][] g) {
-      return false; // TO DO
+      boolean[] visitado = new boolean[g.length];
+    int[] pila = new int[g.length];
+    int top = -1;
+
+    // Empezar desde el nodo 0
+    pila[++top] = 0;
+    visitado[0] = true;
+    int countVisitado = 1;
+
+    while (top != -1) {
+        int vert = pila[top--];
+        for (int vecino : g[vert]) {
+            if (!visitado[vecino]) {
+                visitado[vecino] = true;
+                pila[++top] = vecino;
+                countVisitado++;
+            }
+        }
+    }
+
+    // Verificar si todos los nodos han sido visitados
+    return countVisitado == g.length;
     }
 
     /*
@@ -702,7 +723,66 @@ class Entrega {
      * Retornau el nombre mínim de moviments, o -1 si no és possible arribar-hi.
      */
     static int exercici2(int w, int h, int i, int j) {
-      return -1; // TO DO
+       // Direcciones posibles de movimiento del caballo
+    int[] dx = {1, 1, 2, 2, -1, -1, -2, -2};
+    int[] dy = {2, -2, 1, -1, 2, -2, 1, -1};
+
+    // Convertir posición lineal a coordenadas x, y
+    int startX = i / w;
+    int startY = i % w;
+    int endX = j / w;
+    int endY = j % w;
+
+    // Verificar si la posición inicial es igual a la posición final
+    if (startX == endX && startY == endY) {
+        return 0;
+    }
+
+    // Array para mantener el estado visitado
+    boolean[][] visited = new boolean[h][w];
+    // Arrays para simular la cola
+    int[] queueX = new int[w * h];
+    int[] queueY = new int[w * h];
+    int[] queueDist = new int[w * h];
+    int front = 0;
+    int rear = 0;
+
+    // Inicializar la cola con la posición inicial
+    queueX[rear] = startX;
+    queueY[rear] = startY;
+    queueDist[rear] = 0;
+    rear++;
+    visited[startX][startY] = true;
+
+    // Realizar BFS
+    while (front < rear) {
+        int x = queueX[front];
+        int y = queueY[front];
+        int dist = queueDist[front];
+        front++;
+
+        // Explorar todos los movimientos posibles del caballo
+        for (int k = 0; k < 8; k++) {
+            int newX = x + dx[k];
+            int newY = y + dy[k];
+
+            if (newX >= 0 && newX < h && newY >= 0 && newY < w && !visited[newX][newY]) {
+                if (newX == endX && newY == endY) {
+                    return dist + 1;
+                }
+
+                queueX[rear] = newX;
+                queueY[rear] = newY;
+                queueDist[rear] = dist + 1;
+                rear++;
+                visited[newX][newY] = true;
+            }
+        }
+    }
+
+    // Si no se encuentra un camino, devolver -1
+    return -1;
+    }
     }
 
     /*
