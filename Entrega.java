@@ -800,11 +800,10 @@ class Entrega {
      * abans (o igual) que el vèrtex `v` al recorregut en preordre de l'arbre.
      */
     static boolean exercici3(int[][] g, int r, int u, int v) {
-      int n = g.length;
-      boolean[] visited = new boolean[n];
-      int[] pila = new int[n];
+      boolean[] visitado = new boolean[g.length];
+      int[] pila = new int[g.length];
       int top = -1;
-      int[] preOrden = new int[n];
+      int[] preOrden = new int[g.length];
       int index = 0;
   
       // Inicializar la pila con el nodo raíz
@@ -814,15 +813,15 @@ class Entrega {
       while (top != -1) {
           int vert = pila[top--];
   
-          if (!visited[vert]) {
-              visited[vert] = true;
+          if (!visitado[vert]) {
+              visitado[vert] = true;
               preOrden[index++] = vert;
   
               // Agregar hijos a la pila en orden inverso para asegurar el orden correcto en preorden
               for (int i = g[vert].length - 1; i >= 0; i--) {
-                  int child = g[vert][i];
-                  if (!visited[child]) {
-                      pila[++top] = child;
+                  int hijo = g[vert][i];
+                  if (!visitado[hijo]) {
+                      pila[++top] = hijo;
                   }
               }
           }
