@@ -789,7 +789,47 @@ class Entrega {
      * abans (o igual) que el vèrtex `v` al recorregut en preordre de l'arbre.
      */
     static boolean exercici3(int[][] g, int r, int u, int v) {
-      return false; // TO DO
+      int n = g.length;
+      boolean[] visited = new boolean[n];
+      int[] pila = new int[n];
+      int top = -1;
+      int[] preOrden = new int[n];
+      int index = 0;
+  
+      // Inicializar la pila con el nodo raíz
+      pila[++top] = r;
+  
+      // Realizar recorrido en preorden
+      while (top != -1) {
+          int vert = pila[top--];
+  
+          if (!visited[vert]) {
+              visited[vert] = true;
+              preOrden[index++] = vert;
+  
+              // Agregar hijos a la pila en orden inverso para asegurar el orden correcto en preorden
+              for (int i = g[vert].length - 1; i >= 0; i--) {
+                  int child = g[vert][i];
+                  if (!visited[child]) {
+                      pila[++top] = child;
+                  }
+              }
+          }
+      }
+  
+      // Determinar las posiciones de u y v en el recorrido en preorden
+      int posU = -1, posV = -1;
+      for (int i = 0; i < index; i++) {
+          if (preOrden[i] == u) {
+              posU = i;
+          }
+          if (preOrden[i] == v) {
+              posV = i;
+          }
+      }
+  
+      // Verificar si u aparece antes (o igual) que v
+      return posU <= posV;
     }
 
     /*
