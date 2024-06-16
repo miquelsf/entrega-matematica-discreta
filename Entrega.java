@@ -728,37 +728,37 @@ class Entrega {
     int[] dy = {2, -2, 1, -1, 2, -2, 1, -1};
 
     // Convertir posición lineal a coordenadas x, y
-    int startX = i / w;
-    int startY = i % w;
-    int endX = j / w;
-    int endY = j % w;
+    int inicioX = i / w;
+    int inicioY = i % w;
+    int finalX = j / w;
+    int finalY = j % w;
 
     // Verificar si la posición inicial es igual a la posición final
-    if (startX == endX && startY == endY) {
+    if (inicioX == finalX && inicioY == finalY) {
         return 0;
     }
 
     // Array para mantener el estado visitado
-    boolean[][] visited = new boolean[h][w];
+    boolean[][] visitado = new boolean[h][w];
     // Arrays para simular la cola
-    int[] queueX = new int[w * h];
-    int[] queueY = new int[w * h];
-    int[] queueDist = new int[w * h];
+    int[] corX = new int[w * h];
+    int[] corY = new int[w * h];
+    int[] arrayDist = new int[w * h];
     int front = 0;
-    int rear = 0;
+    int end = 0;
 
     // Inicializar la cola con la posición inicial
-    queueX[rear] = startX;
-    queueY[rear] = startY;
-    queueDist[rear] = 0;
-    rear++;
-    visited[startX][startY] = true;
+    corX[end] = inicioX;
+    corY[end] = inicioY;
+    arrayDist[end] = 0;
+    end++;
+    visitado[inicioX][inicioY] = true;
 
     // Realizar BFS
-    while (front < rear) {
-        int x = queueX[front];
-        int y = queueY[front];
-        int dist = queueDist[front];
+    while (front < end) {
+        int x = corX[front];
+        int y = corY[front];
+        int dist = arrayDist[front];
         front++;
 
         // Explorar todos los movimientos posibles del caballo
@@ -766,16 +766,16 @@ class Entrega {
             int newX = x + dx[k];
             int newY = y + dy[k];
 
-            if (newX >= 0 && newX < h && newY >= 0 && newY < w && !visited[newX][newY]) {
-                if (newX == endX && newY == endY) {
+            if (newX >= 0 && newX < h && newY >= 0 && newY < w && !visitado[newX][newY]) {
+                if (newX == finalX && newY == finalY) {
                     return dist + 1;
                 }
 
-                queueX[rear] = newX;
-                queueY[rear] = newY;
-                queueDist[rear] = dist + 1;
-                rear++;
-                visited[newX][newY] = true;
+                corX[end] = newX;
+                corY[end] = newY;
+                arrayDist[end] = dist + 1;
+                end++;
+                visitado[newX][newY] = true;
             }
         }
     }
