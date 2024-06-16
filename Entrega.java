@@ -850,37 +850,40 @@ class Entrega {
      * L'altura d'un arbre arrelat és la major distància de l'arrel a les fulles.
      */
     static int exercici4(int[] preord, int[] d) {
-        int n = preord.length;
-        int[] stack = new int[n];
-        int[] depth = new int[n];
-        int top = -1;
-        int altura = 0;
-    
-        // Inicializar la pila con la raíz y su profundidad (0)
-        stack[++top] = preord[0];
-        depth[top] = 0;
-    
-        // Realizar el recorrido en preorden
-        int index = 1;
-        while (top != -1) {
-            int node = stack[top];
-            int alturaAc = depth[top--];
-    
-            // Actualizar la altura máxima manualmente
-            if (alturaAc > altura) {
-                altura = alturaAc;
-            }
-    
-            // Agregar los hijos del nodo actual en el orden correcto
-            for (int i = 0; i < d[node]; i++) {
-                stack[++top] = preord[index];
-                depth[top] = alturaAc + 1;
-                index++;
-            }
+           // Inicializar la pila para llevar el seguimiento de las alturas
+    int[] stack = new int[preord.length];
+    int top = -1;
+
+    // Altura máxima inicializada a 0
+    int alturaMaxima = 0;
+
+    // La raíz está a altura 0, empujar a la pila
+    stack[++top] = 0;
+
+    // Altura de cada nodo
+    int[] altura = new int[preord.length];
+    altura[preord[0]] = 0;
+
+    for (int i = 1; i < preord.length; i++) {
+        int nodoActual = preord[i];
+
+        // Ajustar la pila para que refleje el nodo padre correcto
+        while (top >= 0 && d[preord[stack[top]]] == 0) {
+            top--;
         }
-    
-        // La altura final debe tener en cuenta la profundidad máxima encontrada
-        return altura + 1;
+
+        int alturaPadre = altura[preord[stack[top]]];
+        altura[nodoActual] = alturaPadre + 1;
+        alturaMaxima = Math.max(alturaMaxima, altura[nodoActual]);
+
+        // Empujar el nodo actual a la pila
+        stack[++top] = i;
+
+        // Decrementar el grado del nodo padre en la pila
+        d[preord[stack[top - 1]]]--;
+    }
+
+    return alturaMaxima;
     }
 
     
