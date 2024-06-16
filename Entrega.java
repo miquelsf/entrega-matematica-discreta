@@ -71,32 +71,31 @@ class Entrega {
      *
      * Vegeu el mètode Tema1.tests() per exemples.
      */
-    static int exercici1(int n) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
-      n++;
-      int combinacionsTotals = (int) Math.pow(2, n);
-      int certes = 0;
+    public static int exercici1(int n) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
+        int combinacionsTotals = (int) Math.pow(2, n);
+        int certes = 0;
 
-      for (int i = 0; i < combinacionsTotals; i++) {
-          int certesActuals = i;
-          boolean anteriorEraVertadera = true;
+        for (int i = 0; i < combinacionsTotals; i++) {
+            int certesActuals = i;
+            boolean anteriorEraVertadera = true;
 
-          for (int j = 1; j <= n; j++) {
-              int verdaderValorDePj = (certesActuals & 1) == 1 ? 1 : 0;
-              certesActuals >>= 1;
+            for (int j = 1; j <= n; j++) {
+                int verdaderValorDePj = (certesActuals & 1) == 1 ? 1 : 0;
+                certesActuals >>= 1;
 
-              if (j > 1 && anteriorEraVertadera) {
-                  anteriorEraVertadera = verdaderValorDePj == 1;
-              } else {
-                  anteriorEraVertadera = verdaderValorDePj == 1 || !anteriorEraVertadera;
-              }
-          }
+                if (j > 1 && anteriorEraVertadera) {
+                    anteriorEraVertadera = verdaderValorDePj == 1;
+                } else {
+                    anteriorEraVertadera = verdaderValorDePj == 1 || !anteriorEraVertadera;
+                }
+            }
 
-          if (anteriorEraVertadera) {
-              certes++;
-          }
-      }
+            if (anteriorEraVertadera) {
+                certes++;
+            }
+        }
 
-      return certes;
+        return certes;
     }
 
     /*
