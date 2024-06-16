@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -400,42 +401,45 @@ class Entrega {
      *
      * Podeu soposar que `a` i `rel` estan ordenats de menor a major (`rel` lexicogràficament).
      */
-    static int exercici3(int[] a, int[][] rel) { // Fet Miquel, concorda amb una solució des professor, alomillor es professor en te una de malament?, provat en netbeans
-      int n = a.length;
-      boolean[][] matriz = new boolean[n][n];
+    static int exercici3(int[] a, int[][] rel) {
+        int n = a.length;
+        boolean[][] matriz = new boolean[n][n];
 
-      // Construir la matriz de la relación
-      for (int[] par : rel) {
-          int i = indexOf(a, par[0]);
-          int j = indexOf(a, par[1]);
-          matriz[i][j] = true;
-      }
+        // Construir la matriz de la relación
+        for (int[] par : rel) {
+            int i = indexOf(a, par[0]);
+            int j = indexOf(a, par[1]);
+            matriz[i][j] = true;
+        }
 
-      // Verificar si es un orden total
-      for (int i = 0; i < n; i++) {
-          for (int j = 0; j < n; j++) {
-              if (i != j && !matriz[i][j] && !matriz[j][i]) {
-                  return -2; // No es un orden total
-              }
-          }
-      }
+        // Verificar si es un orden total
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && !matriz[i][j] && !matriz[j][i]) {
+                    return -2; // No es un orden total
+                }
+                if (matriz[i][j] && matriz[j][i] && i != j) {
+                    return -2; // No es un orden total (no es antisymétrico)
+                }
+            }
+        }
 
-      // Contar el número de aristas en el diagrama de Hasse
-      int count = 0;
-      for (int i = 0; i < n; i++) {
-          for (int j = 0; j < n; j++) {
-              if (matriz[i][j] && !existeCamino(matriz, i, j)) {
-                  count++;
-              }
-          }
-      }
+        // Contar el número de aristas en el diagrama de Hasse
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matriz[i][j] && i != j && !existeCamino(matriz, i, j)) {
+                    count++;
+                }
+            }
+        }
 
-      return count;
+        return count;
     }
 
     private static boolean existeCamino(boolean[][] matriz, int i, int j) {
         for (int k = 0; k < matriz.length; k++) {
-            if (matriz[i][k] && matriz[k][j]) {
+            if (k != i && k != j && matriz[i][k] && matriz[k][j]) {
                 return true;
             }
         }
@@ -517,18 +521,26 @@ class Entrega {
      * Comprovau si la funció `f` amb domini `dom` i codomini `codom` té inversa. Si la té, retornau
      * el seu graf (el de l'inversa). Sino, retornau null.
      */
-    static int[][] exercici5(int[] dom, int[] codom, Function<Integer, Integer> f) { //Miquel: no funciona :(, ni siquiera es cas null, no ho entenc
-      List<int[]> grafoFuncion = new ArrayList<>();
+    static int[][] exercici5(int[] dom, int[] codom, Function<Integer, Integer> f) {
+        List<int[]> grafoFuncionInversa = new ArrayList<>();
+        Set<Integer> imagen = new HashSet<>();
 
-      for (int x : dom) {
-          int y = f.apply(x);
-          if (!esElementoValido(y, codom)) {
-              return null; // No existe la función
-          }
-          grafoFuncion.add(new int[]{x, y});
-      }
+        for (int x : dom) {
+            int y = f.apply(x);
+            if (!esElementoValido(y, codom)) {
+                return null; // El valor de la función no está en el codominio
+            }
+            if (!imagen.add(y)) {
+                return null; // La función no es inyectiva
+            }
+            grafoFuncionInversa.add(new int[]{y, x});
+        }
 
-      return grafoFuncion.toArray(new int[0][0]);
+        if (imagen.size() != codom.length) {
+            return null; // La función no es sobreyectiva
+        }
+
+        return grafoFuncionInversa.toArray(new int[0][0]);
     }
 
     private static boolean esElementoValido(int y, int[] codom) {
