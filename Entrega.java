@@ -499,10 +499,10 @@ class Entrega {
     }
 
     private static boolean esGrafoFuncion(boolean[][] matriz) {
-        for (int i = 0; i < matriz.length; i++) {
+        for (boolean[] matriz1 : matriz) {
             int count = 0;
             for (int j = 0; j < matriz.length; j++) {
-                if (matriz[i][j]) {
+                if (matriz1[j]) {
                     count++;
                 }
             }
