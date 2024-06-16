@@ -72,7 +72,7 @@ class Entrega {
      *
      * Vegeu el mètode Tema1.tests() per exemples.
      */
-    public static int exercici1(int n) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
+    public static int exercici1(int n) {
         int combinacionsTotals = (int) Math.pow(2, n);
         int certes = 0;
 
@@ -102,30 +102,30 @@ class Entrega {
     /*
      * És cert que ∀x : P(x) -> ∃!y : Q(x,y) ?
      */
-    static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) { //Fet  Miquel, dona lo mateix que es professor, provat en netbeans
-      for (int x : universe) {
-          if (p.test(x)) {
-              boolean existsUniqueY = false;
-              for (int y : universe) {
-                  if (q.test(x, y)) {
-                      if (existsUniqueY) {
-                          return false; // Se encontró más de un y que cumple Q(x, y)
-                      }
-                      existsUniqueY = true;
-                  }
-              }
-              if (!existsUniqueY) {
-                  return false; // No se encontró ningún y que cumple Q(x, y)
-              }
-          }
-      }
-      return true; // Para todos los x donde P(x) es verdadero, existe un único y que cumple Q(x, y)
+    static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
+        for (int x : universe) {
+            if (p.test(x)) {
+                boolean existsUniqueY = false;
+                for (int y : universe) {
+                    if (q.test(x, y)) {
+                        if (existsUniqueY) {
+                            return false; // Es va trobar més d'un y que compleix Q(x, y)
+                        }
+                        existsUniqueY = true;
+                    }
+                }
+                if (!existsUniqueY) {
+                    return false; // No es va trobar cap y que compleix Q(x, y)
+                }
+            }
+        }
+        return true; // Per a tots els x on P(x) és veritable, existeix un únic y que compleix Q(x, y)
     }
 
     /*
      * És cert que ∃x : ∀y : Q(x, y) -> P(x) ?
      */
-    static boolean exercici3(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
+    static boolean exercici3(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
       for (int x : universe) {
           boolean valid = true;
           for (int y : universe) {
@@ -144,7 +144,7 @@ class Entrega {
     /*
      * És cert que ∃x : ∃!y : ∀z : P(x,z) <-> Q(y,z) ?
      */
-    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) { // Fet Miquel, dona lo mateix que es professor, provat en netbeans
+    static boolean exercici4(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
       for (int x : universe) {
           int uniqueYCount = 0;
           for (int y : universe) {
@@ -277,7 +277,7 @@ class Entrega {
      *
      * Podeu soposar que `a`, `b` i `c` estan ordenats de menor a major.
      */
-    static int exercici1(int[] a, int[] b, int[] c) { //Fet Miquel, concorda amb les solucions del professor, provat en netbeans
+    static int exercici1(int[] a, int[] b, int[] c) {
       int n = a.length;
       int m = b.length;
       int p = c.length;
@@ -339,7 +339,7 @@ class Entrega {
      *
      * Podeu soposar que `a` i `rel` estan ordenats de menor a major (`rel` lexicogràficament).
      */
-    static int exercici2(int[] a, int[][] rel) { // Fet Miquel, dona lo mateix que es professor, comprovat en netbeans
+    static int exercici2(int[] a, int[][] rel) {
       boolean[][] clausura = new boolean[a.length][a.length];
 
       // Inicializar la clausura con la relación original
@@ -453,7 +453,7 @@ class Entrega {
      * Podeu soposar que `a`, `rel1` i `rel2` estan ordenats de menor a major (les relacions,
      * lexicogràficament).
      */
-    static int[][] exercici4(int[] a, int[][] rel1, int[][] rel2) { // Miquel: no se si funciona o no, no entenc le comprobacions del professor, el cas null almenys funciona
+    static int[][] exercici4(int[] a, int[][] rel1, int[][] rel2) {
       int n = a.length;
       boolean[][] matriz1 = new boolean[n][n];
       boolean[][] matriz2 = new boolean[n][n];
