@@ -702,7 +702,7 @@ class Entrega {
     int[] pila = new int[g.length];
     int top = -1;
 
-    // Empezar desde el nodo 0
+    // Empezar desde el vértice 0
     pila[++top] = 0;
     visitado[0] = true;
     int countVisitado = 1;
@@ -718,7 +718,7 @@ class Entrega {
         }
     }
 
-    // Verificar si todos los nodos han sido visitados
+    // Verificar si todos los vértices han sido visitados
     return countVisitado == g.length;
     }
 
@@ -806,7 +806,7 @@ class Entrega {
       int[] preOrden = new int[g.length];
       int index = 0;
   
-      // Inicializar la pila con el nodo raíz
+      // Inicializar la pila con el vértice raíz
       pila[++top] = r;
   
       // Realizar recorrido en preorden
@@ -851,39 +851,39 @@ class Entrega {
      */
     static int exercici4(int[] preord, int[] d) {
            // Inicializar la pila para llevar el seguimiento de las alturas
-    int[] stack = new int[preord.length];
+    int[] pila = new int[preord.length];
     int top = -1;
 
     // Altura máxima inicializada a 0
-    int alturaMaxima = 0;
+    int alturaMax = 0;
 
-    // La raíz está a altura 0, empujar a la pila
-    stack[++top] = 0;
+    // La raíz está a altura 0, poner  en la pila
+    pila[++top] = 0;
 
-    // Altura de cada nodo
+    // Altura de cada vértice
     int[] altura = new int[preord.length];
     altura[preord[0]] = 0;
 
     for (int i = 1; i < preord.length; i++) {
-        int nodoActual = preord[i];
+        int vertActual = preord[i];
 
-        // Ajustar la pila para que refleje el nodo padre correcto
-        while (top >= 0 && d[preord[stack[top]]] == 0) {
+        // Actualizar  el valor del puntero de la pila para que refleje el vértice padre correcto
+        while (top >= 0 && d[preord[pila[top]]] == 0) {
             top--;
         }
 
-        int alturaPadre = altura[preord[stack[top]]];
-        altura[nodoActual] = alturaPadre + 1;
-        alturaMaxima = Math.max(alturaMaxima, altura[nodoActual]);
+        int alturaPadre = altura[preord[pila[top]]];
+        altura[vertActual] = alturaPadre + 1;
+        alturaMax = Math.max(alturaMax, altura[vertActual]);
 
-        // Empujar el nodo actual a la pila
-        stack[++top] = i;
+        // Poner el vértice actual en la pila
+        pila[++top] = i;
 
-        // Decrementar el grado del nodo padre en la pila
-        d[preord[stack[top - 1]]]--;
+        // Decrementar el grado del vértice padre en la pila
+        d[preord[pila[top - 1]]]--;
     }
 
-    return alturaMaxima;
+    return alturaMax;
     }
 
     
@@ -1014,6 +1014,7 @@ class Entrega {
 
     // Crear un array per emmagatzemar les solucions
        int[] res = new int[numSols];
+       
 
     // Generar totes les solucions
     for (int i = 0; i < g; i++) {
