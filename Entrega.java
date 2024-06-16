@@ -850,9 +850,40 @@ class Entrega {
      * L'altura d'un arbre arrelat és la major distància de l'arrel a les fulles.
      */
     static int exercici4(int[] preord, int[] d) {
-      return -1; // TO DO
+        int n = preord.length;
+        int[] stack = new int[n];
+        int[] depth = new int[n];
+        int top = -1;
+        int altura = 0;
+    
+        // Inicializar la pila con la raíz y su profundidad (0)
+        stack[++top] = preord[0];
+        depth[top] = 0;
+    
+        // Realizar el recorrido en preorden
+        int index = 1;
+        while (top != -1) {
+            int node = stack[top];
+            int alturaAc = depth[top--];
+    
+            // Actualizar la altura máxima manualmente
+            if (alturaAc > altura) {
+                altura = alturaAc;
+            }
+    
+            // Agregar los hijos del nodo actual en el orden correcto
+            for (int i = 0; i < d[node]; i++) {
+                stack[++top] = preord[index];
+                depth[top] = alturaAc + 1;
+                index++;
+            }
+        }
+    
+        // La altura final debe tener en cuenta la profundidad máxima encontrada
+        return altura + 1;
     }
 
+    
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
      */
