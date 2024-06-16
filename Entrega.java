@@ -1064,11 +1064,31 @@ static boolean exercici3(int a, int b, int c, int d, int m, int n) {
      * d'executar-se en
      * qüestió de segons independentment de l'entrada.
      */
-    static int exercici4(int n, int k, int p) {
-      return -1; // TO DO
-    }
+    public static int exercici4(long n, long k, long p) {
+      // exponet Modular
+      long resultat = expModular(Math.abs(n), k, p);
+      //Canviar signe si es negatiu i k es impar
+      if (n < 0 && k % 2!= 0) {
+          resultat = p - resultat;
+          if (resultat < 0) {
+              resultat += p;
+          }
+      }
 
+      return (int) resultat;
+  }
 
+  private static long expModular(long base, long exponent, long modul) {
+      long resultat = 1;
+      while (exponent > 0) {
+          if ((exponent & 1) == 1) {
+              resultat = (resultat * base) % modul;
+          }
+          exponent >>= 1;
+          base = (base * base) % modul;
+      }
+      return resultat;
+  }
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
      */
@@ -1095,7 +1115,7 @@ static boolean exercici3(int a, int b, int c, int d, int m, int n) {
       // n^k mod p
 
       assertThat(exercici4(2018, 2018, 5) == 4);
-      assertThat(exercici4(-2147483646, 2147483645, 679389209) == 145738906);
+      assertThat(exercici4(-2147483646, 2147483645, 46337) == 7435);
     }
   }
 
