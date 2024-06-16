@@ -923,47 +923,151 @@ class Entrega {
      * Calculau el mínim comú múltiple de `a` i `b`.
      */
     static int exercici1(int a, int b) {
-      return -1; // TO DO
+      int MCD = MCD(a, b);
+      int MCM = (a * b) / MCD;
+      if (MCM < 0) {
+        MCM = -MCM;
+      }
+      return MCM; // TO DO
     }
+
+    // Metode per trobar el MCD mitjançant l'algoritme de Euclides
+   static int MCD(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
 
     /*
      * Trobau totes les solucions de l'equació
      *
-     *   a·x ≡ b (mod n)
+     * a·x ≡ b (mod n)
      *
      * donant els seus representants entre 0 i n-1.
      *
      * Podeu suposar que `n > 1`. Recordau que no no podeu utilitzar la força bruta.
      */
     static int[] exercici2(int a, int b, int n) {
-      return new int[] {}; // TO DO
+    int g = MCD(a, n);
+    // Només hi ha solucions si g divideix b
+    if (b % g != 0) {
+        return new int[0]; // No hi ha solucions
     }
 
+    // Simplificar l'equació dividint per g
+    a /= g;
+    b /= g;
+    n /= g;
+
+    // Trobar una solució inicial utilitzant la nova implementació de la inversa modular
+    int x0 = (inversaModular(a, n) * b) % n;
+    if (x0 < 0) x0 += n;  // Assegurar que x0 és positiu
+
+    int numSols = g;
+
+    // Crear un array per emmagatzemar les solucions
+       int[] res = new int[numSols];
+
+    // Generar totes les solucions
+    for (int i = 0; i < g; i++) {
+        res[i] = (x0 + i * n) % (n * g);
+    }
+
+    return res;
+}
+
+
+
+    static int inversaModular(int a, int n) {
+    int t = 0, nouT = 1;
+    int r = n, nouR = a;
+
+    while (nouR != 0) {
+        int quocient = r / nouR;
+        int tempT = t;
+        t = nouT;
+        nouT = tempT - quocient * nouT;
+
+        int tempR = r;
+        r = nouR;
+        nouR = tempR - quocient * nouR;
+    }
+
+    if (r > 1) {
+        throw new IllegalArgumentException("a no és invertible");
+    }
+    if (t < 0) {
+        t += n;
+    }
+
+    return t;
+}
+
+
+
+
     /*
-     * Donats `a != 0`, `b != 0`, `c`, `d`, `m > 1`, `n > 1`, determinau si el sistema
+     * Donats `a != 0`, `b != 0`, `c`, `d`, `m > 1`, `n > 1`, determinau si el
+     * sistema
      *
-     *   a·x ≡ c (mod m)
-     *   b·x ≡ d (mod n)
+     * a·x ≡ c (mod m)
+     * b·x ≡ d (mod n)
      *
      * té solució.
      */
-    static boolean exercici3(int a, int b, int c, int d, int m, int n) {
-      return false; // TO DO
+    
+static boolean exercici3(int a, int b, int c, int d, int m, int n) {
+    
+    //Les equacions individualment tenen sol
+    if ((c % MCD(a, m) != 0) || (d % MCD(b, n) != 0)) {
+        return false;
     }
 
+    // Sols Individuals
+    int[] solucions1 = exercici2(a, c, m);
+    int[] solucions2 = exercici2(b, d, n);
+
+    //Comprovar que les dues han donat sols
+    if (solucions1.length == 0 || solucions2.length == 0) {
+        return false;
+    }
+
+    //Agafam una sol qualsevol
+    int x1 = solucions1[0];
+    int x2 = solucions2[0];
+
+    // comprovar si existeixen sols
+    for (int sol1 : solucions1) {
+        for (int sol2 : solucions2) {
+            if ((sol1 - sol2) % MCD(m, n) == 0) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
     /*
-     * Donats `n` un enter, `k > 0` enter, i `p` un nombre primer, retornau el residu de dividir n^k
+     * Donats `n` un enter, `k > 0` enter, i `p` un nombre primer, retornau el
+     * residu de dividir n^k
      * entre p.
      *
-     * Alerta perquè és possible que n^k sigui massa gran com per calcular-lo directament.
+     * Alerta perquè és possible que n^k sigui massa gran com per calcular-lo
+     * directament.
      * De fet, assegurau-vos de no utilitzar cap valor superior a max{n, p²}.
      *
-     * Anau alerta també abusant de la força bruta, la vostra implementació hauria d'executar-se en
+     * Anau alerta també abusant de la força bruta, la vostra implementació hauria
+     * d'executar-se en
      * qüestió de segons independentment de l'entrada.
      */
     static int exercici4(int n, int k, int p) {
       return -1; // TO DO
     }
+
 
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
